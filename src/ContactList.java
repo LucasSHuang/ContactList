@@ -21,8 +21,65 @@ public class ContactList {
     }
 
     // Adds new contacts
-    public void addContact(Person person) {
-        contacts.add(person);
+    public void addContact() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Select a type of contact to add");
+        System.out.println("1. Student");
+        System.out.println("2. Athlete");
+        // Makes sure user puts in an integer
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                int choice = scanner.nextInt();
+                // If the user puts in a wrong integer
+                if (choice == 1 || choice == 2) {
+                    // Gets the first name, last name, and phone number
+                    System.out.println("Please fill out the following information");
+                    System.out.println("First Name:");
+                    String firstName = scanner.nextLine();
+                    System.out.println("Last Name:");
+                    String lastName = scanner.nextLine();
+                    System.out.println("Phone Number:");
+                    String phoneNumber = scanner.nextLine();
+                    // Now switches between student and athlete class
+                    if (choice == 1) {
+                        System.out.println("Grade:");
+                        // Makes sure student types an integer and valid grade number
+                        boolean nextInput = false;
+                        while (!nextInput) {
+                            try {
+                                int grade = scanner.nextInt();
+                                if (grade >= 1 && grade <= 12) {
+                                    Student s1 = new Student(firstName, lastName, phoneNumber, grade);
+                                    contacts.add(s1);
+                                    validInput = true;
+                                    nextInput = true;
+                                }
+                                else {
+                                    System.out.println("Please type a grade between 1 and 12");
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Please type an integer");
+                                scanner.nextLine();
+                            }
+                        }
+                    }
+                    else {
+                        System.out.println("Sport:");
+                        String sport = scanner.nextLine();
+                        Athlete a1 = new Athlete(firstName, lastName, phoneNumber, sport);
+                        contacts.add(a1);
+                        validInput = true;
+                    }
+                }
+                else {
+                    System.out.println("Please type 1 or 2");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please type an integer");
+                scanner.nextLine();
+            }
+        }
     }
 
     // Prints the contacts
@@ -103,10 +160,11 @@ public class ContactList {
             try {
                 choice = scanner.nextInt();
                 if (choice > 0 && choice < 8) {
-                    if (choice == 1) {
-                        System.out.println("Select a type of contact to add");
-                        System.out.println();
-
+                    if (choice == 0) {
+                        break;
+                    }
+                    else if (choice == 1) {
+                        addContact();
                     }
                     else if (choice == 2) {
                         sort(0);
