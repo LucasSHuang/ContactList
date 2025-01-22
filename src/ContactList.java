@@ -31,6 +31,7 @@ public class ContactList {
         while (!validInput) {
             try {
                 int choice = scanner.nextInt();
+                scanner.nextLine();
                 // If the user puts in a wrong integer
                 if (choice == 1 || choice == 2) {
                     // Gets the first name, last name, and phone number
@@ -127,9 +128,41 @@ public class ContactList {
         contacts.set(p1, tempPerson);
     }
 
-    public void listStudents() {
-        for (int i = 0; i < contacts.size(); i++) {
+    // Search methods for first name, last name, and phone number
+    public Person searchByFirstName(String firstName) {
+        for (Person p : contacts) {
+            if (p.getFirstName().equals(firstName)) {
+                return p;
+            }
+        }
+        return null;
+    }
 
+    public Person searchByLastName(String lastName) {
+        for (Person p : contacts) {
+            if (p.getLastName().equals(lastName)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public Person searchByPhoneNumber(String phoneNumber) {
+        for (Person p : contacts) {
+            if (p.getPhoneNumber().equals(phoneNumber)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    // Prints out all students
+    public void listStudents() {
+        for (Person p: contacts) {
+            // Uses instanceof to make sure it is a student
+            if (p instanceof Student) {
+                System.out.println(p);
+            }
         }
     }
 
@@ -138,7 +171,7 @@ public class ContactList {
     // Prints menu
     public void printMenu() {
         System.out.println("Welcome to your contacts list");
-        System.out.println("Please pick from the following menu options\n\n");
+        System.out.println("Please pick from the following menu options\n");
         System.out.println("Menu: ");
         System.out.println("1. Add Contact");
         System.out.println("2. List All Contacts By First Name");
@@ -154,12 +187,16 @@ public class ContactList {
     // Runs
     public void run() {
         Scanner scanner = new Scanner(System.in);
-        printMenu();
         int choice = -1;
+        // Makes sure it runs until user inputs 0
         while (choice != 0) {
+            // Checks to make sure you put in an int
             try {
+                // Prints menu and makes sure you put in right number
+                printMenu();
                 choice = scanner.nextInt();
-                if (choice > 0 && choice < 8) {
+                scanner.nextLine();
+                if (choice > 0 && choice < 9) {
                     if (choice == 0) {
                         break;
                     }
@@ -168,15 +205,53 @@ public class ContactList {
                     }
                     else if (choice == 2) {
                         sort(0);
+                        printContacts();
                     }
                     else if (choice == 3) {
                         sort(1);
+                        printContacts();
                     }
                     else if (choice == 4) {
                         sort(2);
+                        printContacts();
                     }
                     else if (choice == 5) {
+                        listStudents();
+                    }
+                    else if (choice == 6) {
 
+                        System.out.println("First Name:");
+                        String firstName = scanner.nextLine();
+                        Person p = searchByFirstName(firstName);
+                        // If person is not in contact list says so
+                        if (p == null) {
+                            System.out.println("First Name Not In Contact List");
+                        }
+                        else {
+                            System.out.println(p);
+                        }
+                    }
+                    else if (choice == 7) {
+                        System.out.println("Last Name:");
+                        String lastName = scanner.nextLine();
+                        Person p = searchByLastName(lastName);
+                        if (p == null) {
+                            System.out.println("Last Name Not In Contact List");
+                        }
+                        else {
+                            System.out.println(p);
+                        }
+                    }
+                    else if (choice == 8){
+                        System.out.println("Phone Number:");
+                        String phoneNumber = scanner.nextLine();
+                        Person p = searchByPhoneNumber(phoneNumber);
+                        if (p == null) {
+                            System.out.println("Phone Number Not In Contact List");
+                        }
+                        else {
+                            System.out.println(p);
+                        }
                     }
                 }
                 else {
@@ -190,6 +265,7 @@ public class ContactList {
     }
 
     public static void main(String[] args) {
+        // Creates contact list and runs the menu
         ContactList c = new ContactList();
         c.run();
     }
